@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f4f1ea;
+  --surface: #efebe1;
+  --card: #ffffff;
+  --ink: #15191c;
+  --muted: #454d4d;
+  --green-deep: #103d34;
+  --green: #1fa971;
+  --hairline: rgba(20, 25, 28, 0.1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Display voice = Newsreader serif, tight tracking. */
+  h1,
+  h2,
+  .font-display {
+    font-family: var(--font-newsreader), Georgia, serif;
+    letter-spacing: -0.02em;
+  }
+
+  h1 {
+    /* H1 ~62px desktop; capped at ≤390px to avoid the display-clip bug. */
+    font-size: clamp(2rem, 7vw, 3.875rem);
+    line-height: 1.04;
+    font-weight: 500;
+  }
+
+  @media (max-width: 390px) {
+    h1 {
+      font-size: clamp(1.75rem, 8.5vw, 2.125rem); /* cap ~34px */
+    }
+  }
+
+  h2 {
+    font-size: clamp(1.6rem, 4vw, 2.5rem);
+    line-height: 1.1;
+    font-weight: 500;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8;
+  }
+
+  /* Primary conversion button — the single green accent. */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-green-deep px-6 py-3 text-sm font-semibold text-on-dark transition-transform duration-75 ease-crisp hover:-translate-y-0.5 hover:bg-[#0d342c] active:translate-y-0;
+    min-height: 44px;
+  }
+
+  .btn-accent {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-green px-6 py-3 text-sm font-semibold text-white transition-transform duration-75 ease-crisp hover:-translate-y-0.5 active:translate-y-0;
+    min-height: 44px;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-hairline bg-card px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-surface;
+    min-height: 44px;
+  }
+
+  .card {
+    @apply rounded-2xl border border-hairline-soft bg-card;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-hairline bg-card/70 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-muted;
+  }
+}
+
+/* Scroll fade-up — staggered via inline style on each item. */
+.fade-up {
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reduced motion: freeze the wave + dot, disable autoplay/parallax. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* safe-area padding helper for the mobile bottom panel */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}

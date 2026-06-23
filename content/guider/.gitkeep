@@ -1,0 +1,3 @@
+Guides (MDX) live here. The breadth spec fills the clusters.
+Frontmatter must satisfy guideFrontmatterSchema (content/schema.ts):
+  title, slug, cluster, description, date, author, sources[]
