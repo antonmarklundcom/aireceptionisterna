@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { branscher, getBransch } from "@/content/branscher";
+import { branscher, getBransch, getChildren, getHubs } from "@/content/branscher";
 import { siteConfig } from "@/lib/env";
 import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbLd, serviceLd } from "@/lib/jsonld";
@@ -9,6 +9,7 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import { FinalCta } from "@/components/FinalCta";
 import { HowItWorks } from "@/components/HowItWorks";
 import { LeadForm } from "@/components/LeadForm";
+import { BranschHubGrid } from "@/components/BranschHubGrid";
 
 export function generateStaticParams() {
   return branscher.map((b) => ({ slug: b.slug }));
@@ -44,6 +45,16 @@ export default async function BranschPage({
   if (!b) notFound();
 
   const url = `${siteConfig.url}/bransch/${b.slug}`;
+  const isHub = b.kind === "hub";
+  const children = isHub ? getChildren(b.kategori) : [];
+
+  // Cross-links: hubs link to other hubs; industry pages link to siblings
+  // within the same hub category (falling back to other hubs if isolated).
+  const crossLinks = isHub
+    ? getHubs().filter((h) => h.slug !== b.slug)
+    : branscher.filter(
+        (x) => x.kategori === b.kategori && x.kind === "page" && x.slug !== b.slug
+      );
 
   return (
     <>
@@ -61,12 +72,21 @@ export default async function BranschPage({
         <nav className="mb-6 text-sm text-faint" aria-label="Brödsmulor">
           <Link href="/" className="hover:text-green-deep">Hem</Link>
           <span className="px-2" aria-hidden>/</span>
+          {!isHub && (
+            <>
+              <Link href={`/bransch/${b.kategori}`} className="hover:text-green-deep">
+                Branscher
+              </Link>
+              <span className="px-2" aria-hidden>/</span>
+            </>
+          )}
           <span className="text-muted">{b.namn}</span>
         </nav>
         <div className="max-w-2xl">
           <span className="eyebrow mb-4">{b.namn}</span>
           <h1>{b.h1}</h1>
           <p className="mt-5 text-lg leading-relaxed text-muted">{b.intro}</p>
+          <p className="mt-3 text-base font-semibold text-green-soft-ink">{b.outcome}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/boka-demo" className="btn-primary text-base">Boka kostnadsfri demo</Link>
             <Link href="/tjanster/ai-receptionist" className="btn-ghost text-base">Så fungerar tjänsten</Link>
@@ -74,6 +94,9 @@ export default async function BranschPage({
           <p className="mt-3 text-sm text-faint">{siteConfig.responsePromise}.</p>
         </div>
       </section>
+
+      {/* Hub: icon-grid of its industry sub-pages */}
+      {isHub && <BranschHubGrid children={children} />}
 
       {/* Pains */}
       <section className="container-page pb-8">
@@ -91,7 +114,9 @@ export default async function BranschPage({
       {b.status === "full" ? (
         <>
           <HowItWorks />
-          <FaqAccordion items={b.faq} heading={`Vanliga frågor — ${b.namn}`} />
+          {b.faq.length > 0 && (
+            <FaqAccordion items={b.faq} heading={`Vanliga frågor — ${b.namn}`} />
+          )}
         </>
       ) : (
         // Stub: a real shell, no fabricated content. A genuine capture path
@@ -116,19 +141,21 @@ export default async function BranschPage({
         </section>
       )}
 
-      {/* Cross-links to other branschsidor */}
-      <section className="container-page py-12">
-        <h2 className="text-center text-2xl">Fler branscher</h2>
-        <div className="mx-auto mt-6 flex max-w-3xl flex-wrap justify-center gap-3">
-          {branscher
-            .filter((x) => x.slug !== b.slug)
-            .map((x) => (
+      {/* Cross-links: hubs → other hubs; industry pages → siblings */}
+      {crossLinks.length > 0 && (
+        <section className="container-page py-12">
+          <h2 className="text-center text-2xl">
+            {isHub ? "Fler branschkategorier" : "Fler branscher inom " + b.namn.toLowerCase()}
+          </h2>
+          <div className="mx-auto mt-6 flex max-w-3xl flex-wrap justify-center gap-3">
+            {crossLinks.map((x) => (
               <Link key={x.slug} href={`/bransch/${x.slug}`} className="btn-ghost text-sm">
                 {x.namn}
               </Link>
             ))}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       <FinalCta />
     </>

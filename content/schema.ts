@@ -34,6 +34,30 @@ export const stepSchema = z.object({
 });
 export type Step = z.infer<typeof stepSchema>;
 
+// icon = key into the inline SVG motif set in components/icons.tsx
+export const branschIconSchema = z.enum([
+  "wrench",
+  "bolt",
+  "hammer",
+  "paintroller",
+  "roof",
+  "truck",
+  "car",
+  "tire",
+  "clinic",
+  "tooth",
+  "scissors",
+]);
+export type BranschIcon = z.infer<typeof branschIconSchema>;
+
+export const branschKategoriSchema = z.enum([
+  "bygg-hantverk",
+  "fordon",
+  "kliniker-salonger",
+  "ovrigt",
+]);
+export type BranschKategori = z.infer<typeof branschKategoriSchema>;
+
 export const branschSchema = z.object({
   slug: z.string().regex(/^[a-z0-9-]+$/, "ASCII slug only (no å/ä/ö)"),
   namn: z.string(),
@@ -46,6 +70,13 @@ export const branschSchema = z.object({
   caseRef: z.string().nullable(),
   // full = content-complete page; stub = real shell, breadth fills content
   status: z.enum(["full", "stub"]),
+  // hub = category landing page rendering an icon-grid of its children;
+  // page = a single industry page (the default, matches v1 pages).
+  kind: z.enum(["hub", "page"]).default("page"),
+  kategori: branschKategoriSchema,
+  icon: branschIconSchema,
+  // short, number-free outcome line (nav dropdown + hub grid + hero)
+  outcome: z.string(),
 });
 export type Bransch = z.infer<typeof branschSchema>;
 

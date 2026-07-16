@@ -75,6 +75,105 @@ export function ShieldIcon({ className }: IconProps) {
   );
 }
 
+export function WrenchIcon({ className }: IconProps) {
+  return (
+    <svg className={className ?? base} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2-2 2.6-2.6Z" />
+    </svg>
+  );
+}
+
+export function BoltIcon({ className }: IconProps) {
+  return (
+    <svg className={className ?? base} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M13 3 4 14h6l-1 7 9-11h-6l1-7Z" />
+    </svg>
+  );
+}
+
+export function HammerIcon({ className }: IconProps) {
+  return (
+    <svg className={className ?? base} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="m15 12 5.5 5.5-2 2L13 14M9 8l3-3 4 4-3 3M3 21l6-6" />
+    </svg>
+  );
+}
+
+export function PaintRollerIcon({ className }: IconProps) {
+  return (
+    <svg className={className ?? base} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <rect x="4" y="5" width="14" height="6" rx="1.5" />
+      <path d="M9 11v4h4v6H9" />
+    </svg>
+  );
+}
+
+export function RoofIcon({ className }: IconProps) {
+  return (
+    <svg className={className ?? base} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M3 12 12 4l9 8M6 11v9h12v-9" />
+    </svg>
+  );
+}
+
+export function TruckIcon({ className }: IconProps) {
+  return (
+    <svg className={className ?? base} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M2 7h11v10H2zM13 10h5l3 3v4h-8z" />
+      <circle cx="6.5" cy="18" r="1.6" />
+      <circle cx="17" cy="18" r="1.6" />
+    </svg>
+  );
+}
+
+export function CarIcon({ className }: IconProps) {
+  return (
+    <svg className={className ?? base} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M4 16V11l2-5h12l2 5v5" />
+      <path d="M3 16h18M6 16v2M18 16v2" />
+      <circle cx="7.5" cy="16" r="1.6" />
+      <circle cx="16.5" cy="16" r="1.6" />
+    </svg>
+  );
+}
+
+export function TireIcon({ className }: IconProps) {
+  return (
+    <svg className={className ?? base} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="3.5" />
+      <path d="M12 3v3M12 18v3M3 12h3M18 12h3" />
+    </svg>
+  );
+}
+
+export function ClinicIcon({ className }: IconProps) {
+  return (
+    <svg className={className ?? base} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M12 3v18M3 12h18" />
+      <rect x="3" y="3" width="18" height="18" rx="4" />
+    </svg>
+  );
+}
+
+export function ToothIcon({ className }: IconProps) {
+  return (
+    <svg className={className ?? base} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M12 4c-3 0-5 2-5 5 0 3 1 4 1.3 8 .1 1.4 2 1.4 2.2 0 .2-1.6.5-3 1.5-3s1.3 1.4 1.5 3c.2 1.4 2.1 1.4 2.2 0C15.9 13 17 12 17 9c0-3-2-5-5-5Z" />
+    </svg>
+  );
+}
+
+export function ScissorsIcon({ className }: IconProps) {
+  return (
+    <svg className={className ?? base} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <circle cx="6" cy="6" r="2.5" />
+      <circle cx="6" cy="18" r="2.5" />
+      <path d="m20 5-12 14M20 19 8 5" />
+    </svg>
+  );
+}
+
 const map = {
   phone: PhoneIcon,
   calendar: CalendarIcon,
@@ -84,6 +183,17 @@ const map = {
   transfer: TransferIcon,
   language: LanguageIcon,
   shield: ShieldIcon,
+  wrench: WrenchIcon,
+  bolt: BoltIcon,
+  hammer: HammerIcon,
+  paintroller: PaintRollerIcon,
+  roof: RoofIcon,
+  truck: TruckIcon,
+  car: CarIcon,
+  tire: TireIcon,
+  clinic: ClinicIcon,
+  tooth: ToothIcon,
+  scissors: ScissorsIcon,
 } as const;
 
 export type IconKey = keyof typeof map;

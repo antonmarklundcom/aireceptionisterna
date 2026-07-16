@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { branscher } from "@/content/branscher";
+import { branscher, getHubs } from "@/content/branscher";
 import { siteConfig } from "@/lib/env";
 
 export function Footer() {
@@ -30,13 +30,22 @@ export function Footer() {
         <div>
           <h3 className="text-sm font-semibold text-ink">Branscher</h3>
           <ul className="mt-3 space-y-2 text-sm text-muted">
-            {branscher.map((b) => (
-              <li key={b.slug}>
-                <Link href={`/bransch/${b.slug}`} className="hover:text-green-deep">
-                  {b.namn}
+            {getHubs().map((hub) => (
+              <li key={hub.slug}>
+                <Link href={`/bransch/${hub.slug}`} className="hover:text-green-deep">
+                  {hub.namn}
                 </Link>
               </li>
             ))}
+            {branscher
+              .filter((b) => b.kategori === "ovrigt")
+              .map((b) => (
+                <li key={b.slug}>
+                  <Link href={`/bransch/${b.slug}`} className="hover:text-green-deep">
+                    {b.namn}
+                  </Link>
+                </li>
+              ))}
           </ul>
         </div>
 
