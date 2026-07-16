@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getService } from "@/content/services";
-import { branscher } from "@/content/branscher";
+import { getHubs } from "@/content/branscher";
 import { siteConfig } from "@/lib/env";
 import { JsonLd } from "@/components/JsonLd";
 import { serviceLd, breadcrumbLd } from "@/lib/jsonld";
@@ -85,10 +85,10 @@ export default function ServicePage() {
       {/* Internal links to branschsidor */}
       <section className="container-page py-12">
         <h2 className="text-center">För din bransch</h2>
-        <div className="mx-auto mt-8 grid max-w-4xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {branscher.map((b) => (
-            <Link key={b.slug} href={`/bransch/${b.slug}`} className="card p-5 transition-colors hover:bg-surface">
-              <span className="font-display text-lg">{b.namn}</span>
+        <div className="mx-auto mt-8 grid max-w-3xl gap-4 sm:grid-cols-3">
+          {getHubs().map((hub) => (
+            <Link key={hub.slug} href={`/bransch/${hub.slug}`} className="card p-5 transition-colors hover:bg-surface">
+              <span className="font-display text-lg">{hub.namn}</span>
               <span className="mt-1 block text-sm text-green-soft-ink">Läs mer →</span>
             </Link>
           ))}

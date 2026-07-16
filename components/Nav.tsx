@@ -2,14 +2,17 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { branscher } from "@/content/branscher";
+import { getHubs, getChildren } from "@/content/branscher";
 import { siteConfig } from "@/lib/env";
 
-/** Site navigation. Branscher = dropdown to the 4 branschsidor. "Logga in"
- *  hidden when NEXT_PUBLIC_LOGIN_URL unset. ASCII slugs throughout. */
+/** Site navigation. Branscher = mega-menu grouped by hub (Bygg & hantverk /
+ *  Fordon / Kliniker & salonger), each listing its industry sub-pages.
+ *  "Logga in" hidden when NEXT_PUBLIC_LOGIN_URL unset. ASCII slugs throughout. */
 export function Nav() {
   const [open, setOpen] = useState(false);
   const [branschOpen, setBranschOpen] = useState(false);
+  const [mobileBranschOpen, setMobileBranschOpen] = useState(false);
+  const hubs = getHubs();
 
   const links = (
     <>
@@ -34,15 +37,27 @@ export function Nav() {
           <span aria-hidden>▾</span>
         </button>
         {branschOpen && (
-          <div className="absolute left-0 top-full z-50 mt-2 w-60 rounded-xl border border-hairline bg-card p-2 shadow-card-sm">
-            {branscher.map((b) => (
-              <Link
-                key={b.slug}
-                href={`/bransch/${b.slug}`}
-                className="block rounded-lg px-3 py-2 text-sm hover:bg-surface"
-              >
-                {b.namn}
-              </Link>
+          <div className="absolute left-0 top-full z-50 mt-2 grid w-[560px] grid-cols-3 gap-1 rounded-xl border border-hairline bg-card p-4 shadow-card-sm">
+            {hubs.map((hub) => (
+              <div key={hub.slug}>
+                <Link
+                  href={`/bransch/${hub.slug}`}
+                  className="block rounded-lg px-2 py-1.5 text-sm font-semibold text-ink hover:text-green-deep"
+                >
+                  {hub.navLabel}
+                </Link>
+                <div className="mt-1 flex flex-col">
+                  {getChildren(hub.kategori).map((child) => (
+                    <Link
+                      key={child.slug}
+                      href={`/bransch/${child.slug}`}
+                      className="rounded-lg px-2 py-1.5 text-sm text-muted hover:bg-surface hover:text-green-deep"
+                    >
+                      {child.navLabel}
+                    </Link>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         )}
@@ -99,9 +114,59 @@ export function Nav() {
 
       {open && (
         <div className="border-t border-hairline bg-bg lg:hidden">
-          <div className="container-page flex flex-col gap-4 py-5 text-base font-medium text-muted">
-            {links}
-            <div className="flex flex-col gap-3 pt-2">
+          <div className="container-page flex flex-col gap-1 py-5 text-base font-medium text-muted">
+            <a href="/#funktioner" className="py-2 hover:text-green-deep" onClick={() => setOpen(false)}>
+              Funktioner
+            </a>
+            <a href="/#sa-fungerar-det" className="py-2 hover:text-green-deep" onClick={() => setOpen(false)}>
+              Så fungerar det
+            </a>
+
+            <button
+              type="button"
+              className="flex items-center justify-between py-2 text-left hover:text-green-deep"
+              aria-expanded={mobileBranschOpen}
+              onClick={() => setMobileBranschOpen((v) => !v)}
+            >
+              Branscher
+              <span aria-hidden>{mobileBranschOpen ? "▴" : "▾"}</span>
+            </button>
+            {mobileBranschOpen && (
+              <div className="flex flex-col gap-4 border-l border-hairline pb-2 pl-4">
+                {hubs.map((hub) => (
+                  <div key={hub.slug}>
+                    <Link
+                      href={`/bransch/${hub.slug}`}
+                      className="block py-1 text-sm font-semibold text-ink"
+                      onClick={() => setOpen(false)}
+                    >
+                      {hub.navLabel}
+                    </Link>
+                    <div className="flex flex-col">
+                      {getChildren(hub.kategori).map((child) => (
+                        <Link
+                          key={child.slug}
+                          href={`/bransch/${child.slug}`}
+                          className="py-1 text-sm text-muted"
+                          onClick={() => setOpen(false)}
+                        >
+                          {child.navLabel}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <Link href="/priser" className="py-2 hover:text-green-deep" onClick={() => setOpen(false)}>
+              Priser
+            </Link>
+            <a href="/#vanliga-fragor" className="py-2 hover:text-green-deep" onClick={() => setOpen(false)}>
+              Vanliga frågor
+            </a>
+
+            <div className="flex flex-col gap-3 pt-3">
               {siteConfig.loginUrl && (
                 <a href={siteConfig.loginUrl} className="btn-ghost">
                   Logga in
